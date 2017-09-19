@@ -2,16 +2,16 @@
 #
 # search.py
 # ---------
-# Licensing Information:  You are free to use or extend these projects for 
-# educational purposes provided that (1) you do not distribute or publish 
-# solutions, (2) you retain this notice, and (3) you provide clear 
-# attribution to UC Berkeley, including a link to 
+# Licensing Information:  You are free to use or extend these projects for
+# educational purposes provided that (1) you do not distribute or publish
+# solutions, (2) you retain this notice, and (3) you provide clear
+# attribution to UC Berkeley, including a link to
 # http://inst.eecs.berkeley.edu/~cs188/pacman/pacman.html
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
-# The core projects and autograders were primarily created by John DeNero 
+# The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
-# Student side autograding was added by Brad Miller, Nick Hay, and 
+# Student side autograding was added by Brad Miller, Nick Hay, and
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
 
@@ -84,12 +84,42 @@ def depthFirstSearch(problem):
 
     To get started, you might want to try some of these simple commands to
     understand the search problem that is being passed in:
-
     print "Start:", problem.getStartState()
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
+
     """
     "*** YOUR CODE HERE ***"
+    print "Start:", problem.getStartState()
+    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
+    print "Start's successors:", problem.getSuccessors(problem.getStartState())
+    closed = []
+    frontier = util.Stack()
+    state_fathers = []
+    solution = []
+    visited = []
+    explored = []
+    """ if the node initial is a solution return build list """
+    if problem.isGoalState(problem.getStartState()):
+        return []
+    else:
+        """ if is not a solution then we put it in the stack """
+        frontier.push(problem.getStartState())
+        actual_state = frontier.pop()
+        visited.append(actual_state)
+        """  """
+        while not problem.isGoalState(actual_state):
+            """ """
+            print "Actual", actual_state
+            if not not problem.getSuccessors(actual_state):
+                actual_state_successors = problem.getSuccessors(actual_state)
+                state_fathers.append(actual_state)
+                for state in actual_state_successors:
+                    print "Sate succesor", state
+                    frontier.push(state)
+            closed.append(actual_state)
+            actual_state = frontier.pop()
+            explored.append(actual_state)
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
