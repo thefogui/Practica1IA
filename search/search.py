@@ -90,15 +90,12 @@ def depthFirstSearch(problem):
 
     """
     "*** YOUR CODE HERE ***"
-    print "Start:", problem.getStartState()
-    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    print "Start's successors:", problem.getSuccessors(problem.getStartState())
     closed = []
     frontier = util.Stack()
-    state_fathers = []
+    family_list = []
+    family = {}
     solution = []
-    visited = []
-    explored = []
+    found = False
     """ if the node initial is a solution return build list """
     if problem.isGoalState(problem.getStartState()):
         return []
@@ -106,20 +103,28 @@ def depthFirstSearch(problem):
         """ if is not a solution then we put it in the stack """
         frontier.push(problem.getStartState())
         actual_state = frontier.pop()
-        visited.append(actual_state)
+        direction = ""
+        value = 0
         """  """
-        while not problem.isGoalState(actual_state):
+        while not found:
             """ """
-            print "Actual", actual_state
             if not not problem.getSuccessors(actual_state):
                 actual_state_successors = problem.getSuccessors(actual_state)
-                state_fathers.append(actual_state)
                 for state in actual_state_successors:
-                    print "Sate succesor", state
                     frontier.push(state)
+                    family[state] = actual_state
+                family_list.append(family)
+            print family_list
             closed.append(actual_state)
+            found = problem.isGoalState(actual_state)
             actual_state = frontier.pop()
-            explored.append(actual_state)
+            actual_state = actual_state[0]
+        if found:
+            for family in family_list:
+                for path in family:
+                    if path == actual_state:
+                        solution.append(path)
+            return solution.reverse()
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
