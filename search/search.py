@@ -75,6 +75,13 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
+class State:
+    def __init__(self, node, nodeFather):
+        self.position = node[0]
+        self.score = node[2]
+        self.direction = node[1]
+        self.nodeFather = nodeFather
+
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first.
@@ -92,39 +99,25 @@ def depthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
     closed = []
     frontier = util.Stack()
-    family_list = []
-    family = {}
-    solution = []
-    found = False
     """ if the node initial is a solution return build list """
-    if problem.isGoalState(problem.getStartState()):
-        return []
-    else:
-        """ if is not a solution then we put it in the stack """
-        frontier.push(problem.getStartState())
-        actual_state = frontier.pop()
-        direction = ""
-        value = 0
-        """  """
-        while not found:
-            """ """
-            if not not problem.getSuccessors(actual_state):
-                actual_state_successors = problem.getSuccessors(actual_state)
-                for state in actual_state_successors:
-                    frontier.push(state)
-                    family[state] = actual_state
-                family_list.append(family)
-            print family_list
+    """ if is not a solution then we put it in the stack """
+    frontier.push(problem.getStartState())
+    actual_state = frontier.pop()
+    i = 1
+    while True:
+        """ """
+        if frontier.isEmpty() and i == 0:
+            return []
+        if problem.isGoalState(actual_state):
+            return ['West']
+        if actual_state not in closed:
             closed.append(actual_state)
-            found = problem.isGoalState(actual_state)
-            actual_state = frontier.pop()
-            actual_state = actual_state[0]
-        if found:
-            for family in family_list:
-                for path in family:
-                    if path == actual_state:
-                        solution.append(path)
-            return solution.reverse()
+            actual_state_successors = problem.getSuccessors(actual_state)
+            for state in actual_state_successors:
+                node = State(state, actual_state)
+                frontier.push(node.position)
+        actual_state = frontier.pop()
+        i = 0
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
