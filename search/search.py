@@ -77,9 +77,13 @@ def tinyMazeSearch(problem):
 
 class State:
     def __init__(self, node, nodeFather):
-        self.position = node[0]
-        self.score = node[2]
-        self.direction = node[1]
+        if len(node) == 3:
+            self.position = node[0]
+            self.score = node[2]
+            self.direction = node[1]
+        else:
+            self.position = node
+        self.tuple_node = node
         self.nodeFather = nodeFather
 
 def depthFirstSearch(problem):
@@ -98,26 +102,33 @@ def depthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
     closed = []
+    solution = []
     frontier = util.Stack()
     """ if the node initial is a solution return build list """
     """ if is not a solution then we put it in the stack """
-    frontier.push(problem.getStartState())
-    actual_state = frontier.pop()
-    i = 1
+    i = 0
+    nodo = State((0, 0), (0,0))
     while True:
         """ """
-        if frontier.isEmpty() and i == 0:
+        if frontier.isEmpty() and i == 1:
             return []
-        if problem.isGoalState(actual_state):
-            return ['West']
-        if actual_state not in closed:
-            closed.append(actual_state)
-            actual_state_successors = problem.getSuccessors(actual_state)
-            for state in actual_state_successors:
-                node = State(state, actual_state)
-                frontier.push(node.position)
+        if i == 0:
+            node = State(problem.getStartState(), (0, 0))
+            frontier.push(node)
+            i = 1;
         actual_state = frontier.pop()
-        i = 0
+        if problem.isGoalState(actual_state.position):
+            while nodo != node:
+                solution.append(nodo.direction)
+                nodo = nodo.nodeFather
+            solution.reverse()
+            return solution
+        if actual_state.position not in closed:
+            closed.append(actual_state.position)
+            actual_state_successors = problem.getSuccessors(actual_state.position)
+            for state in actual_state_successors:
+                nodo = State(state, actual_state)
+                frontier.push(nodo)
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
