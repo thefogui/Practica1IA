@@ -103,28 +103,23 @@ def depthFirstSearch(problem):
         """ if is not a solution then we put it in the stack """
         frontier.push(problem.getStartState())
         actual_state = frontier.pop()
-        direction = ""
-        value = 0
         """  """
         while not found:
             """ """
-            if not not problem.getSuccessors(actual_state):
+            found = problem.isGoalState(actual_state)
+            if not not problem.getSuccessors(actual_state) and not found:
                 actual_state_successors = problem.getSuccessors(actual_state)
                 for state in actual_state_successors:
                     frontier.push(state)
                     family[state] = actual_state
                 family_list.append(family)
-            print family_list
-            closed.append(actual_state)
-            found = problem.isGoalState(actual_state)
+            if actual_state not in closed:
+                closed.append(actual_state)
+            if found:
+                print "end"
+                return []
             actual_state = frontier.pop()
             actual_state = actual_state[0]
-        if found:
-            for family in family_list:
-                for path in family:
-                    if path == actual_state:
-                        solution.append(path)
-            return solution.reverse()
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
